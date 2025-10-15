@@ -1,0 +1,28 @@
+# Agno Agent Demo Project Dependencies
+
+# Core Agno framework
+agno>=0.1.0
+
+# AI Model providers (uncomment as needed)
+openai>=1.0.0         # For OpenAI GPT models
+# anthropic>=0.25.0    # For Claude models
+# groq>=0.9.0          # For Groq models
+# cohere>=5.0.0        # For Cohere models
+
+# Tools and utilities
+duckduckgo-search>=6.0.0  # For web search capabilities
+python-dotenv>=1.0.0      # For environment variable management
+
+# Database and knowledge base (optional)
+# psycopg2-binary>=2.9.0   # For PostgreSQL vector database
+# sqlalchemy>=2.0.0        # For database ORM
+
+# Web UI and server dependencies
+fastapi>=0.100.0          # For Agno OS web interface
+uvicorn>=0.20.0           # ASGI server for FastAPI
+websockets>=11.0.0        # For real-time communication
+
+# Development tools
+pytest>=7.0.0             # For testing
+black>=23.0.0             # For code formatting
+flake8>=6.0.0             # For linting
