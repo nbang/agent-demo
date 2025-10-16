@@ -1,0 +1,1 @@
+"""Contract tests for multi-agent system APIs."""

@@ -8,6 +8,8 @@ interact with all your different agent types.
 """
 
 import os
+import sys
+from pathlib import Path
 from dotenv import load_dotenv
 from agno.agent.agent import Agent
 from agno.os import AgentOS
@@ -15,7 +17,10 @@ from agno.os.interfaces.agui import AGUI
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.reasoning import ReasoningTools
 from agno.db.sqlite import SqliteDb
-from model_config import get_configured_model, get_reasoning_model, print_model_info
+
+# Add src directory to path for model config imports
+sys.path.insert(0, str(Path(__file__).parent / "src"))
+from models.config import get_configured_model, get_reasoning_model, print_model_info
 
 # Load environment variables
 load_dotenv()

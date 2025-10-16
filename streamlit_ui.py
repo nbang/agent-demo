@@ -13,14 +13,16 @@ import pathlib
 from datetime import datetime
 from dotenv import load_dotenv
 
-# Add project root to path
-sys.path.insert(0, str(pathlib.Path(__file__).parent))
+# Add project root and src to path
+project_root = pathlib.Path(__file__).parent
+sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(project_root / "src"))
 
 from agno.agent import Agent
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.reasoning import ReasoningTools
 from agno.db.sqlite import SqliteDb
-from model_config import get_configured_model, get_reasoning_model, print_model_info
+from models.config import get_configured_model, get_reasoning_model, print_model_info
 
 # Load environment variables
 load_dotenv()
@@ -308,9 +310,27 @@ def main():
         
         for i, example in enumerate(example_prompts[selected_agent]):
             with cols[i]:
-                if st.button(f"💬 {example[:30]}...", key=f"example_{i}"):
-                    # Add example to chat input (this will trigger the chat flow)
-                    st.session_state.chat_input = example
+                if st.button(f"💬 {example[:30]}...", key=f"example_{i}_{selected_agent}"):
+                    # Add example directly to messages and process it
+                    messages.append({"role": "user", "content": example})
+                    
+                    # Get response from agent
+                    try:
+                        agent = agents[selected_agent]
+                        response = agent.run(example)
+                        
+                        # Handle response format
+                        if hasattr(response, 'content') and response.content:
+                            response_text = response.content
+                        else:
+                            response_text = str(response)
+                        
+                        messages.append({"role": "assistant", "content": response_text})
+                        
+                    except Exception as e:
+                        error_msg = f"Sorry, I encountered an error: {e}"
+                        messages.append({"role": "assistant", "content": error_msg})
+                    
                     st.rerun()
 
     # Footer

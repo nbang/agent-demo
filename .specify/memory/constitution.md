@@ -1,50 +1,68 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Agno Agent Demo Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Agno Framework First
+Every AI agent implementation must use the Agno framework as the primary foundation. Agents should leverage Agno's built-in capabilities for model management, conversation handling, and tool integration. No custom implementations of core AI functionality that duplicates Agno capabilities.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Multi-Model Support (NON-NEGOTIABLE)
+All agents must support both OpenAI and Azure OpenAI models through configurable environment variables. Model selection should be abstracted through a unified interface. No hard-coded model dependencies that prevent switching between providers.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Test-First Development (NON-NEGOTIABLE)
+TDD mandatory for all agent implementations: Contract tests written → User approved → Tests fail → Then implement. Red-Green-Refactor cycle strictly enforced. Every agent feature must have corresponding test coverage.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Modular Agent Architecture
+Each agent type (basic, tools, reasoning, memory) must be independently deployable and testable. Clear separation of concerns between agent capabilities. Shared utilities should be library-based, not inheritance-based.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Real-Time Performance Standards
+Agent response time must be < 2 seconds for basic interactions, < 5 seconds for tool-enhanced responses. Memory management must support concurrent conversations. All I/O operations must be non-blocking where possible.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Security Requirements
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### API Key Management
+All API keys and sensitive configuration must be managed through environment variables. No hardcoded secrets in source code. Support for both .env files and system environment variables.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Model Safety
+AI model interactions must include appropriate content filtering and safety measures. Error handling must prevent information leakage. All model responses should be validated for safety before presentation to users.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### Data Privacy
+Agent memory and conversation history must be handled according to privacy best practices. Clear data retention policies. User consent for data storage where applicable.
+
+## Quality Standards
+
+### Code Quality Gates
+- **Simplicity Gate**: Use ≤3 projects/dependencies where possible
+- **Anti-Abstraction Gate**: Use Agno framework directly, avoid unnecessary abstractions
+- **Integration-First Gate**: Contract tests before implementation
+- **Performance Gate**: All response time requirements must be met
+- **Security Gate**: All security requirements must be validated
+
+### Documentation Requirements
+Every agent must include comprehensive README with setup instructions, usage examples, and configuration options. API documentation for all public interfaces. Architecture decision records for significant design choices.
+
+### Testing Standards
+- Unit tests: >80% code coverage
+- Integration tests: All external dependencies mocked or contracted
+- End-to-end tests: Complete user workflows validated
+- Performance tests: Response time requirements verified
+
+## Development Workflow
+
+### Implementation Process
+1. Create specification using /speckit.specify
+2. Generate technical plan using /speckit.plan
+3. Write contract tests first
+4. Implement to pass tests
+5. Validate against quality gates
+6. Document and deploy
+
+### Review Requirements
+All code changes must pass automated testing. Peer review required for architectural changes. Performance benchmarks must be maintained. Security review for any changes to authentication or API key handling.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other development practices. Amendments require documentation, team approval, and migration plan. All implementations must verify compliance with these principles.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Complexity must be justified against business value. When in doubt, choose simplicity and maintainability over clever optimizations.
+
+**Version**: 1.0.0 | **Ratified**: 2025-10-15 | **Last Amended**: 2025-10-15
