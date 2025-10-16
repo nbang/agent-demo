@@ -2,51 +2,6 @@
 
 A comprehensive demonstration of building AI agents using the Agno framework. This project showcases various agent types including basic conversational agents, memory-enabled agents, reasoning agents with structured thinking, tool-equipped agents, and multi-agent systems for collaborative problem-solving.
 
-## 📁 Project Structure
-
-```
-agent-demo/
-├── src/                          # Source code directory
-│   ├── agents/                   # Agent implementations
-│   │   ├── basic.py             # Basic conversational agent
-│   │   ├── memory.py            # Memory-enabled agent
-│   │   ├── reasoning.py         # Reasoning agent
-│   │   ├── tools.py             # Tool-equipped agent
-│   │   └── multi_agent/         # Multi-agent system components
-│   ├── models/                   # Model configuration
-│   │   └── config.py            # Multi-provider model setup (OpenAI/Azure)
-│   ├── services/                 # Supporting services
-│   │   └── performance_monitor.py  # Performance monitoring
-│   └── lib/                      # Shared utilities
-│       ├── error_handling.py    # Error handling & recovery
-│       └── logging_config.py    # Logging configuration
-├── examples/                     # Example implementations
-│   ├── agent_with_memory.py     # Memory agent example
-│   ├── agent_with_tools.py      # Tools agent example
-│   ├── reasoning_agent.py       # Reasoning agent example
-│   └── multi_agents/            # Multi-agent examples
-│       ├── research_team.py     # Research collaboration team
-│       ├── problem_solving_team.py  # Problem-solving team
-│       └── content_creation_team.py # Content creation team
-├── tests/                        # Comprehensive test suite
-│   ├── unit/                    # Unit tests
-│   ├── integration/             # Integration tests
-│   └── contract/                # Contract tests
-├── docs/                         # Documentation
-│   ├── *_GUIDE.md               # Implementation guides
-│   └── *_COMPLETE.md            # Status documentation
-├── specs/                        # Feature specifications
-├── scripts/                      # Utility scripts
-├── .specify/                     # SpecKit configuration
-├── agent.py                      # Basic agent entry point
-├── memory_agent.py              # Memory agent entry point
-├── reasoning_agent.py           # Reasoning agent entry point
-├── tools_agent.py               # Tools agent entry point
-├── multi_agent_demo.py          # Multi-agent demo
-├── requirements.txt             # Python dependencies
-└── .env                         # Environment configuration (not in git)
-```
-
 ## 🎯 Key Features
 
 ### 🤖 Multiple Agent Types
@@ -342,9 +297,9 @@ agent-demo/
 │   │   └── config.py
 │   ├── services/                # Supporting services (monitoring, storage, utils)
 │   │   └── performance_monitor.py
-  │   └── lib/                  # Shared utilities
-  │       ├── error_handling.py
-  │       └── logging_config.py
+│   └── lib/                  # Shared utilities
+│       ├── error_handling.py
+│       └── logging_config.py
 ├── examples/                    # Example scripts and multi-agent demos
 ├── tests/                       # Unit, integration, and contract tests
 ├── docs/                        # Documentation (guides, status, how-tos)
