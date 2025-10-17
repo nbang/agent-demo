@@ -39,16 +39,13 @@ from agno.agent import Agent
 from agno.tools.reasoning import ReasoningTools
 from agno.tools.duckduckgo import DuckDuckGoTools
 from src.models.config import get_reasoning_model, print_model_info, test_model_connection
-from src.lib.error_handling import (
-    handle_error, AgentError, ConfigurationError, ValidationError,
-    is_recoverable_error, log_error_for_debugging
-)
-from src.services.performance_monitor import PerformanceMonitor
-from src.lib.logging_config import setup_logging, get_logger
+from src.services.error_handling import ErrorHandler
+from src.services.monitoring import PerformanceMonitor
+from src.services.logging import setup_logging, get_agent_logger
 
 # Initialize logging
 setup_logging()
-logger = get_logger(__name__)
+logger = get_agent_logger(__name__)
 
 class ReasoningPatterns:
     """Defines different reasoning patterns and approaches."""
@@ -211,7 +208,7 @@ def create_reasoning_agent() -> Agent:
         
     except Exception as e:
         logger.error(f"Error creating reasoning agent: {str(e)}")
-        raise ConfigurationError(f"Failed to create reasoning agent: {str(e)}")
+        raise ValueError(f"Failed to create reasoning agent: {str(e)}")
 
 def display_reasoning_banner():
     """Display welcome banner for the reasoning agent."""
@@ -409,7 +406,7 @@ def main():
         print("📡 Testing reasoning model connection...")
         connection_result = test_model_connection()
         if not connection_result:
-            raise ConfigurationError("Model connection failed. Please check your configuration.")
+            raise ValueError("Model connection failed. Please check your configuration.")
         
         print("✅ Model connection successful!")
         
@@ -448,7 +445,9 @@ def main():
                     continue
                 elif user_input.lower() in ['stats', 'performance', 'perf']:
                     print("\n📊 Performance Statistics:")
-                    performance_monitor.print_performance_report()
+                    stats = performance_monitor.get_summary_stats()
+                    for key, value in stats.items():
+                        print(f"  {key}: {value}")
                     continue
                 
                 # Validate input
@@ -494,9 +493,9 @@ def main():
                     
                 except Exception as e:
                     print(f"\n❌ Error during reasoning analysis: {str(e)}")
-                    log_error_for_debugging(e)
+                    logger.error(f"Error during reasoning analysis: {e}", exc_info=True)
                     
-                    if is_recoverable_error(e):
+                    if "network" in str(e).lower() or "timeout" in str(e).lower() or "api" in str(e).lower():
                         print("🔄 You can try rephrasing your question or asking a different one.")
                     else:
                         print("⚠️ This error may require restarting the reasoning agent.")
@@ -505,28 +504,33 @@ def main():
                 print("\n👋 Thank you for thinking through complex problems with me!")
                 break
             except Exception as e:
-                error_message = handle_error(e)
+                error_message = f"Unexpected error: {e}"
+                logger.error(f"Unexpected error in reasoning loop: {e}")
                 print(f"\n❌ {error_message}")
                 
-                if is_recoverable_error(e):
+                if "network" in str(e).lower() or "timeout" in str(e).lower() or "api" in str(e).lower():
                     print("🔄 You can try again with a different question.")
                 else:
                     print("⚠️ This error may require restarting the agent.")
     
-    except ConfigurationError as e:
-        error_message = handle_error(e)
+    except ValueError as e:
+        error_message = f"Configuration error: {e}"
+        logger.error(f"Configuration error: {e}")
         print(f"\n❌ Configuration Error: {error_message}")
         print("\n🔧 Please check your environment setup and try again.")
         sys.exit(1)
     except Exception as e:
-        error_message = handle_error(e)
+        error_message = f"Unexpected error: {e}"
+        logger.error(f"Unexpected error: {e}")
         print(f"\n❌ Unexpected Error: {error_message}")
-        log_error_for_debugging(e)
+        logger.debug(f"Error details: {e}", exc_info=True)
         sys.exit(1)
     
     # Final performance report
     print("\n📊 Final Performance Summary:")
-    performance_monitor.print_performance_report()
+    stats = performance_monitor.get_summary_stats()
+    for key, value in stats.items():
+        print(f"  {key}: {value}")
     
     print("\n🧠 Thank you for using the Advanced Reasoning Agent!")
     print("Remember: Great reasoning is the foundation of great decisions! 💡")

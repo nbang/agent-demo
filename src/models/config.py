@@ -13,8 +13,8 @@ import logging
 from typing import Any, Optional, Dict, Tuple
 from dataclasses import dataclass
 
-# Import error handling classes
-from src.lib.error_handling import ConfigurationError, APIError, NetworkError, handle_error
+# Import services
+from src.services.error_handling import ErrorHandler
 
 # Configure logging for model configuration
 logger = logging.getLogger(__name__)
@@ -39,7 +39,7 @@ def validate_environment() -> ModelConfiguration:
         ModelConfiguration: Configuration details with validation status
         
     Raises:
-        ConfigurationError: If configuration is invalid
+        ValueError: If configuration is invalid
     """
     # Get model name from environment
     model_name = os.getenv("DEFAULT_MODEL", "gpt-4o-mini")
@@ -126,14 +126,14 @@ def get_configured_model(model_name: Optional[str] = None) -> Any:
         Configured model instance (AzureOpenAI or OpenAIChat)
         
     Raises:
-        ConfigurationError: If no valid API configuration is found
+        ValueError: If no valid API configuration is found
         APIConnectionError: If model cannot be instantiated
     """
     # Validate environment first
     config = validate_environment()
     
     if not config.is_valid:
-        raise ConfigurationError(f"Invalid configuration: {config.error_message}")
+        raise ValueError(f"Invalid configuration: {config.error_message}")
     
     # Override model name if provided
     if model_name:
@@ -158,12 +158,11 @@ def get_configured_model(model_name: Optional[str] = None) -> Any:
             return OpenAIChat(id=config.model_name)
             
         else:
-            raise ConfigurationError(f"Unsupported provider: {config.provider}")
+            raise ValueError(f"Unsupported provider: {config.provider}")
             
     except Exception as e:
         logger.error(f"Failed to create model {config.model_name}: {str(e)}")
-        raise APIError(f"Failed to create model {config.model_name}: {str(e)}", 
-                      api_provider=config.provider, original_error=e)
+        raise ConnectionError(f"Failed to create model {config.model_name}: {str(e)}")
 
 
 def get_reasoning_model() -> Any:

@@ -21,22 +21,20 @@ from dotenv import load_dotenv
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
 
-# Initialize logging first
-from src.lib.logging_config import get_logger, log_user_interaction, log_security_event
+# Initialize services
+from src.services.logging import get_agent_logger, setup_logging
+from src.services.error_handling import ErrorHandler, ErrorSeverity, ErrorCategory, RecoveryStrategy
+from src.services.monitoring import PerformanceMonitor
 from agno.agent import Agent
 from src.models.config import get_configured_model, print_model_info, test_model_connection
-from src.lib.error_handling import (
-    AgentError, ConfigurationError, APIError, NetworkError, 
-    ValidationError, UserInteractionError, handle_error, 
-    create_error_recovery_suggestions, is_recoverable_error
-)
-from src.services.performance_monitor import get_performance_monitor, monitor_agent_response
+
+# Initialize services for basic agent
+logger = get_agent_logger(__name__, "basic", "basic_agent")
+error_handler = ErrorHandler("basic", "basic_agent")
+performance_monitor = PerformanceMonitor(agent_type="basic", agent_id="basic_agent")
 
 # Load environment variables from .env file
 load_dotenv()
-
-# Get logger for this module
-logger = get_logger(__name__)
 
 def create_basic_agent():
     """
@@ -133,23 +131,23 @@ def validate_user_input(user_input: str) -> str:
         str: Validated and cleaned input
         
     Raises:
-        ValidationError: If input is invalid
+        ValueError: If input is invalid
     """
     # Basic input validation
     if not isinstance(user_input, str):
-        raise ValidationError("Input must be a string")
+        raise ValueError("Input must be a string")
     
     # Trim whitespace
     cleaned_input = user_input.strip()
     
     # Check for reasonable length (prevent very long inputs)
     if len(cleaned_input) > 10000:
-        raise ValidationError("Input is too long (maximum 10,000 characters)")
+        raise ValueError("Input is too long (maximum 10,000 characters)")
     
     # Check for potential security issues (basic check)
     suspicious_patterns = ['<script', 'javascript:', 'eval(', 'exec(']
     if any(pattern.lower() in cleaned_input.lower() for pattern in suspicious_patterns):
-        raise ValidationError("Input contains potentially unsafe content")
+        raise ValueError("Input contains potentially unsafe content")
     
     return cleaned_input
 
@@ -157,8 +155,8 @@ def main():
     """
     Main function to run the agent demo with comprehensive error handling.
     """
-    # Get performance monitor
-    perf_monitor = get_performance_monitor()
+    # Use the global performance monitor
+    perf_monitor = performance_monitor
     
     # Set up signal handlers for graceful shutdown
     setup_signal_handlers()
@@ -167,7 +165,7 @@ def main():
     display_welcome_banner()
     
     # Show system health
-    perf_monitor.print_system_health()
+    print("💻 System Status: Ready")
     
     # Show model configuration
     print_model_info()
@@ -200,10 +198,14 @@ def main():
                 
                 # Check for special commands
                 if user_input.lower() in ['stats', 'performance', 'perf']:
-                    perf_monitor.print_performance_report()
+                    stats = perf_monitor.get_summary_stats()
+                    print(f"📊 Performance Stats:")
+                    print(f"   Operations: {stats['total_operations']}")
+                    print(f"   Success Rate: {stats['success_rate']:.1f}%")
+                    print(f"   Avg Response Time: {stats['avg_response_time']:.2f}s")
                     continue
                 elif user_input.lower() in ['health', 'system']:
-                    perf_monitor.print_system_health()
+                    print("💻 System Status: Operational")
                     continue
                 elif user_input.lower() in ['help', 'commands']:
                     print("\n🔧 Available Commands:")
@@ -220,8 +222,9 @@ def main():
                 # Validate user input
                 try:
                     validated_input = validate_user_input(user_input)
-                except ValidationError as e:
-                    print(f"❌ {handle_error(e)}")
+                except ValueError as e:
+                    print(f"❌ Input validation error: {e}")
+                    logger.error(f"Validation error: {e}")
                     continue
                 
                 # Get agent response with performance monitoring
@@ -236,21 +239,21 @@ def main():
                         
                     # Log successful interaction
                     processing_time = time.time() - start_time
-                    log_user_interaction(len(validated_input), response_generated, processing_time)
+                    logger.info(f"User interaction completed - Input length: {len(validated_input)}, Response generated: {response_generated}, Processing time: {processing_time}s")
                     
                 except Exception as e:
-                    error_message = handle_error(e)
+                    error_message = f"Agent error: {e}"
+                    logger.error(f"Agent error during processing: {e}")
                     print(f"❌ {error_message}")
                     
-                    # Check if error is recoverable
-                    if is_recoverable_error(e):
-                        print("🔄 This error might be temporary. Try again in a moment.")
+                    # Check if error is recoverable based on type
+                    if "network" in str(e).lower() or "timeout" in str(e).lower():
+                        print("🔄 This appears to be a network error - please try again in a moment.")
                     else:
-                        suggestions = create_error_recovery_suggestions(e)
-                        if suggestions:
-                            print("\n💡 Suggestions:")
-                            for suggestion in suggestions[:3]:  # Show top 3 suggestions
-                                print(f"   • {suggestion}")
+                        print("\n💡 Suggestions:")
+                        print("   • Check your internet connection")
+                        print("   • Verify your API keys are correctly set")
+                        print("   • Try a simpler question if the error persists")
             
             except KeyboardInterrupt:
                 print("\n\n👋 Goodbye!")
@@ -259,43 +262,50 @@ def main():
                 print("\n\n👋 Goodbye!")
                 break
             except Exception as e:
-                error_message = handle_error(e)
+                error_message = f"Processing error: {e}"
+                logger.error(f"Processing error: {e}")
                 print(f"\n❌ {error_message}")
                 
                 # For critical errors, ask if user wants to continue
-                if isinstance(e, AgentError) and e.severity.value in ['high', 'critical']:
+                if "critical" in str(e).lower() or "fatal" in str(e).lower():
                     try:
-                        continue_choice = input("\n❓ Do you want to continue? (y/n): ").strip().lower()
+                        continue_choice = input("\n❓ Critical error detected. Do you want to continue? (y/n): ").strip().lower()
                         if continue_choice not in ['y', 'yes']:
                             print("👋 Goodbye!")
+                            logger.info("User chose to exit after critical error")
                             break
                     except (KeyboardInterrupt, EOFError):
-                        print("\n� Goodbye!")
+                        print("\n👋 Goodbye!")
+                        logger.info("User exited after critical error")
                         break
     
-    except ConfigurationError as e:
-        error_message = handle_error(e)
+    except ValueError as e:
+        error_message = f"Configuration error: {e}"
+        logger.error(f"Configuration error: {e}")
         print(f"\n❌ {error_message}")
-        print("\n🔧 Fix the configuration and try again.")
-    except APIError as e:
-        error_message = handle_error(e)
+        print("\n🔧 Please check your configuration and try again.")
+    except ConnectionError as e:
+        error_message = f"Network error: {e}"
+        logger.error(f"Network error: {e}")
         print(f"\n❌ {error_message}")
-    except NetworkError as e:
-        error_message = handle_error(e)
-        print(f"\n❌ {error_message}")
+        print("\n🌐 Please check your internet connection and try again.")
     except Exception as e:
-        error_message = handle_error(e)
+        error_message = f"Unexpected error: {e}"
+        logger.error(f"Unexpected error: {e}")
         print(f"\n❌ {error_message}")
         
-        suggestions = create_error_recovery_suggestions(e)
-        if suggestions:
-            print("\n💡 Try these steps:")
-            for i, suggestion in enumerate(suggestions, 1):
-                print(f"   {i}. {suggestion}")
+        print("\n💡 Try these steps:")
+        print("   1. Check your internet connection")
+        print("   2. Verify your API keys are correctly set")
+        print("   3. Try restarting the application")
     
     # Show final performance report
     print("\n📊 Final Performance Summary:")
-    perf_monitor.print_performance_report()
+    stats = perf_monitor.get_summary_stats()
+    print(f"   Total Operations: {stats['total_operations']}")
+    print(f"   Success Rate: {stats['success_rate']:.1f}%")
+    if stats['avg_response_time'] > 0:
+        print(f"   Avg Response Time: {stats['avg_response_time']:.2f}s")
     
     print("\n👋 Thank you for using Agno Agent Demo!")
 

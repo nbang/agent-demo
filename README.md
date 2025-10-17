@@ -1,15 +1,16 @@
 # Agno Agent Demo
 
-A comprehensive demonstration of building AI agents using the Agno framework. This project showcases various agent types including basic conversational agents, memory-enabled agents, reasoning agents with structured thinking, tool-equipped agents, and multi-agent systems for collaborative problem-solving.
+A comprehensive demonstration of building AI agents using the Agno framework. This project features a single integrated demo that showcases all agent capabilities in one unified interface, including basic conversational agents, memory-enabled agents, reasoning agents with structured thinking, tool-equipped agents, and multi-agent systems for collaborative problem-solving.
 
 ## 🎯 Key Features
 
-### 🤖 Multiple Agent Types
+### 🤖 Unified Agent Interface
+The `single_agent_demo.py` provides five different agent modes in one application:
 - **Basic Agent**: Simple conversational AI with streaming responses
-- **Memory Agent**: Maintains conversation history and context
-- **Reasoning Agent**: Structured problem-solving with step-by-step analysis
 - **Tools Agent**: Web search, file operations, calculations, and system utilities
-- **Multi-Agent Systems**: Collaborative teams for research, problem-solving, and content creation
+- **Reasoning Agent**: Structured problem-solving with step-by-step analysis
+- **Memory Agent**: Maintains conversation history and context across sessions
+- **Comprehensive Agent**: All capabilities combined in one powerful agent
 
 ### 🛠️ Core Capabilities
 - **Multi-Model Support**: Works with OpenAI and Azure OpenAI
@@ -71,23 +72,27 @@ LOG_LEVEL=INFO
 LOG_TO_FILE=true
 ```
 
-### 3. Run an Agent
+### 3. Quick Start
 
 ```bash
-# Run the basic agent
-python agent.py
+# Run the unified agent demo
+python single_agent_demo.py
 
-# Or run other agent types
-python memory_agent.py
-python reasoning_agent.py
-python tools_agent.py
+# Or run multi-agent examples
 python multi_agent_demo.py
+
+# Or explore examples directory
+python examples/agent_with_memory.py
+python examples/agent_with_tools.py
+python examples/reasoning_agent.py
 ```
 
-## 🤖 Available Agents
+## 🤖 Agent Modes
 
-### 🤖 **Basic Agent** (`agent.py`)
-A simple conversational agent with streaming responses and basic error handling.
+The `single_agent_demo.py` provides an interactive menu to choose from five different agent modes:
+
+### 1. **Basic Agent Mode**
+A simple conversational agent with streaming responses and comprehensive error handling.
 
 **Features:**
 - Multi-model support (OpenAI & Azure OpenAI)
@@ -97,13 +102,8 @@ A simple conversational agent with streaming responses and basic error handling.
 - Graceful shutdown handling
 - Structured logging
 
-**Usage:**
-```bash
-python agent.py
-```
-
-### 🛠️ **Advanced Tool Agent** (`tools_agent.py`)
-A comprehensive agent with various productivity tools and capabilities.
+### 2. **Tools Agent Mode**
+Access to web search, file operations, system information, and calculations.
 
 **Features:**
 - 🔍 Web search and research (DuckDuckGo)
@@ -113,22 +113,18 @@ A comprehensive agent with various productivity tools and capabilities.
 - 📅 Date and time utilities
 - ⚡ Safe system command execution
 
-**Usage:**
-```bash
-python tools_agent.py
-```
+### 3. **Reasoning Agent Mode**
+Structured problem-solving with step-by-step analysis and logical reasoning.
 
-**Example Interactions:**
-- "Search for the latest Python news"
-- "List files in the current directory"
-- "Calculate the square root of 144"
-- "What's the current system information?"
-- "Read the README.md file"
+**Features:**
+- 🔍 Complex problem decomposition and analysis
+- 🧠 Multi-perspective consideration and evaluation
+- 📊 Evidence-based reasoning with uncertainty handling
+- 🔄 Real-time intermediate step streaming
+- 📝 Comprehensive problem-solving patterns
 
-For detailed documentation, see [`docs/TOOLS_AGENT_GUIDE.md`](docs/TOOLS_AGENT_GUIDE.md).
-
-### 💾 **Memory Agent** (`memory_agent.py`)
-An agent that maintains conversation history and context across sessions using SQLite storage.
+### 4. **Memory Agent Mode**
+Maintains conversation history and context across sessions using SQLite storage.
 
 **Features:**
 - 💬 Persistent conversation memory
@@ -137,17 +133,28 @@ An agent that maintains conversation history and context across sessions using S
 - 🗄️ SQLite database storage
 - 🔄 Session management
 
-**Usage:**
+### 5. **Comprehensive Agent Mode**
+All capabilities combined in one powerful agent with memory, tools, and reasoning.
+
+## 🚀 Using the Single Agent Demo
+
+Run the unified agent demo:
+
 ```bash
-python memory_agent.py
+python single_agent_demo.py
 ```
 
-**Example Interactions:**
-- "Remember that I like Python programming"
-- "What did we discuss last time?"
-- "Can you recall what my favorite topic is?"
+**Interactive Features:**
+- **Agent Selection Menu**: Choose from 5 different agent modes
+- **Mode Switching**: Type `switch` to change agent types during conversation
+- **Performance Stats**: Type `stats` to view response times and metrics
+- **Comprehensive Help**: Type `help` for available commands
 
-For detailed documentation, see [`docs/MEMORY_AGENT_GUIDE.md`](docs/MEMORY_AGENT_GUIDE.md).
+**Example Interactions:**
+- "Search for the latest Python news" (Tools Mode)
+- "Remember that I like Python programming" (Memory Mode)
+- "Analyze the pros and cons of remote work" (Reasoning Mode)
+- "List files and remember my project structure" (Comprehensive Mode)
 
 ### 🧠 **Advanced Reasoning Agent** (`reasoning_agent.py`)
 A sophisticated agent that performs structured, step-by-step problem analysis with comprehensive reasoning capabilities.

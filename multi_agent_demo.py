@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from agents.multi_agent import MultiAgentTeam, TeamConfiguration
 from agents.multi_agent.constants import TeamType
-from agents.multi_agent.logging_config import setup_multi_agent_logging
+from src.services.logging import setup_multi_agent_logging
 
 
 def create_research_team(topic: str) -> MultiAgentTeam:

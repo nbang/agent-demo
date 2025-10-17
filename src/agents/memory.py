@@ -51,8 +51,8 @@ try:
     from agno.agent import Agent
     from agno.db.sqlite import SqliteDb
     from src.models.config import get_configured_model, print_model_info
-    from src.lib.logging_config import setup_logging
-    from src.lib.error_handling import AgentError, ErrorSeverity
+    from src.services.logging import setup_logging
+    from src.services.error_handling import ErrorHandler
 except ImportError as e:
     print(f"❌ Import Error: {e}")
     print("Please ensure all required dependencies are installed.")
@@ -146,7 +146,7 @@ class MemoryAgentManager:
         except Exception as e:
             error_msg = f"Failed to initialize memory database: {e}"
             print(f"❌ {error_msg}")
-            raise AgentError(error_msg, ErrorSeverity.HIGH)
+            raise ValueError(error_msg)
     
     def create_memory_agent(self) -> Agent:
         """
@@ -207,7 +207,7 @@ class MemoryAgentManager:
         except Exception as e:
             error_msg = f"Failed to create memory agent: {e}"
             print(f"❌ {error_msg}")
-            raise AgentError(error_msg, ErrorSeverity.HIGH)
+            raise ValueError(error_msg)
     
     def get_memory_statistics(self) -> Dict[str, Any]:
         """
