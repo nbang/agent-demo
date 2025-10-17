@@ -155,7 +155,7 @@ python single_agent_demo.py
 - "Analyze the pros and cons of remote work" (Reasoning Mode)
 - "List files and remember my project structure" (Comprehensive Mode)
 
-### 🧠 **Advanced Reasoning Agent** (`reasoning_agent.py`)
+### 🧠 **Advanced Reasoning Agent** (Mode 3 in `single_agent_demo.py`)
 A sophisticated agent that performs structured, step-by-step problem analysis with comprehensive reasoning capabilities.
 
 **Features:**
@@ -171,7 +171,13 @@ A sophisticated agent that performs structured, step-by-step problem analysis wi
 
 **Usage:**
 ```bash
-python reasoning_agent.py
+python single_agent_demo.py
+# Then select option 3: Reasoning Agent Mode
+```
+
+**Alternative standalone example:**
+```bash
+python examples/reasoning_agent.py
 ```
 
 **Example Complex Problems:**
@@ -311,11 +317,10 @@ agent-demo/
 ├── docs/                        # Documentation (guides, status, how-tos)
 ├── specs/                       # Feature specifications and plans
 ├── .specify/                    # SpecKit configuration
-├── agent.py                     # Root entry point (imports from src/agents.basic)
-├── memory_agent.py              # Root entry point for memory-enabled agent
-├── reasoning_agent.py           # Root entry point for reasoning agent
-├── tools_agent.py               # Root entry point for tools-enabled agent
+├── single_agent_demo.py         # Main entry point - unified agent with 5 modes
 ├── multi_agent_demo.py          # Root-level launcher for multi-agent demos
+├── streamlit_ui.py              # Streamlit web interface
+├── agno_os_ui.py                # Advanced UI interface
 ├── requirements.txt             # Python dependencies
 └── .env                         # Environment configuration (not committed)
 ```
