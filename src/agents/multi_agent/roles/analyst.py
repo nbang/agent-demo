@@ -36,6 +36,7 @@ class AnalystRole:
         """
         self.analyst_type = analyst_type
         self.capabilities = self._define_capabilities()
+        self.quality_standards = self._define_quality_standards()
         self.role_definition = self._create_role_definition()
         
         logger.info(f"Created {analyst_type} analyst role")
@@ -151,6 +152,42 @@ class AnalystRole:
             ])
         
         return base_capabilities
+    
+    def _define_quality_standards(self) -> Dict[str, Any]:
+        """Define quality standards based on analyst type."""
+        base_standards = {
+            'accuracy_threshold': 0.85,
+            'completeness_threshold': 0.9,
+            'timeliness_threshold': 0.8,
+            'objectivity_score': 0.9
+        }
+        
+        if self.analyst_type == "data":
+            base_standards.update({
+                'data_quality_threshold': 0.95,
+                'statistical_significance': 0.05,
+                'confidence_interval': 0.95
+            })
+        elif self.analyst_type == "business":
+            base_standards.update({
+                'business_relevance': 0.9,
+                'market_accuracy': 0.85,
+                'strategic_alignment': 0.8
+            })
+        elif self.analyst_type == "quality":
+            base_standards.update({
+                'quality_metrics_coverage': 0.95,
+                'compliance_score': 1.0,
+                'audit_readiness': 0.9
+            })
+        elif self.analyst_type == "research":
+            base_standards.update({
+                'research_depth': 0.9,
+                'source_credibility': 0.95,
+                'methodology_rigor': 0.9
+            })
+        
+        return base_standards
     
     def _create_role_definition(self) -> RoleDefinition:
         """Create role definition for the analyst."""
@@ -358,6 +395,12 @@ Research Analysis Specialization:
             recommendations.append("Consider additional statistical tests")
         elif self.analyst_type == "business":
             recommendations.append("Evaluate business impact and opportunities")
+        elif self.analyst_type == "research":
+            recommendations.extend([
+                "Strengthen evidence base with peer-reviewed sources",
+                "Refine research methodology for better outcomes",
+                "Consider conducting additional research phases"
+            ])
         
         return recommendations
     

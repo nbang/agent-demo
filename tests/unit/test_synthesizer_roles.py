@@ -70,28 +70,30 @@ class TestSynthesisCapability:
         assert len(high_complexity.input_requirements) > len(low_complexity.input_requirements)
 
 
+# Module-level fixtures available to all test classes
+@pytest.fixture
+def general_synthesizer():
+    """Create a general synthesizer for testing."""
+    return SynthesizerRole("general")
+
+@pytest.fixture
+def research_synthesizer():
+    """Create a research synthesizer for testing."""
+    return SynthesizerRole("research")
+
+@pytest.fixture
+def content_synthesizer():
+    """Create a content synthesizer for testing."""
+    return SynthesizerRole("content")
+
+@pytest.fixture
+def executive_synthesizer():
+    """Create an executive synthesizer for testing."""
+    return SynthesizerRole("executive")
+
+
 class TestSynthesizerRole:
     """Test SynthesizerRole class."""
-    
-    @pytest.fixture
-    def general_synthesizer(self):
-        """Create a general synthesizer for testing."""
-        return SynthesizerRole("general")
-    
-    @pytest.fixture
-    def research_synthesizer(self):
-        """Create a research synthesizer for testing."""
-        return SynthesizerRole("research")
-    
-    @pytest.fixture
-    def content_synthesizer(self):
-        """Create a content synthesizer for testing."""
-        return SynthesizerRole("content")
-    
-    @pytest.fixture
-    def executive_synthesizer(self):
-        """Create an executive synthesizer for testing."""
-        return SynthesizerRole("executive")
     
     def test_synthesizer_initialization(self, general_synthesizer):
         """Test synthesizer role initialization."""
@@ -191,8 +193,8 @@ class TestSynthesizerRole:
         assert "quality standards" in instructions.lower()
         
         # Check for content-specific instructions
-        assert "narrative creation" in instructions.lower()
-        assert "content harmonization" in instructions.lower()
+        assert "engaging narratives" in instructions.lower()
+        assert "harmonize tone" in instructions.lower()
         assert "creative integrity" in instructions.lower()
     
     def test_synthesize_information_method(self, research_synthesizer):
@@ -691,7 +693,7 @@ class TestSynthesizerRoleIntegration:
             "business_context": "Healthcare technology investment"
         }
         
-        executive_results = executive_synthesizer.synthesize_information(executive_inputs, "strategic")
+        executive_results = executive_synthesizer.synthesize_information(executive_inputs, synthesis_type="strategic", target_format="strategic")
         
         # Verify each synthesizer produced appropriate results
         assert research_results["synthesizer_type"] == "research"

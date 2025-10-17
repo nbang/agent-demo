@@ -65,28 +65,30 @@ class TestResearchCapability:
         assert cap1.description != cap2.description
 
 
+# Module-level fixtures available to all test classes
+@pytest.fixture
+def general_researcher():
+    """Create a general researcher for testing."""
+    return ResearcherRole("general")
+
+@pytest.fixture
+def academic_researcher():
+    """Create an academic researcher for testing."""
+    return ResearcherRole("academic")
+
+@pytest.fixture
+def industry_researcher():
+    """Create an industry researcher for testing."""
+    return ResearcherRole("industry")
+
+@pytest.fixture
+def technical_researcher():
+    """Create a technical researcher for testing."""
+    return ResearcherRole("technical")
+
+
 class TestResearcherRole:
     """Test ResearcherRole class."""
-    
-    @pytest.fixture
-    def general_researcher(self):
-        """Create a general researcher for testing."""
-        return ResearcherRole("general")
-    
-    @pytest.fixture
-    def academic_researcher(self):
-        """Create an academic researcher for testing."""
-        return ResearcherRole("academic")
-    
-    @pytest.fixture
-    def industry_researcher(self):
-        """Create an industry researcher for testing."""
-        return ResearcherRole("industry")
-    
-    @pytest.fixture
-    def technical_researcher(self):
-        """Create a technical researcher for testing."""
-        return ResearcherRole("technical")
     
     def test_researcher_initialization(self, general_researcher):
         """Test researcher role initialization."""

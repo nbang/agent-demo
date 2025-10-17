@@ -42,7 +42,7 @@ class ResearchTask:
     quality_criteria: Dict[str, Any]
     
     # Runtime properties
-    status: TaskStatus = TaskStatus.PENDING
+    status: TaskStatus = TaskStatus.ASSIGNED
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
     assigned_agent: Optional[str] = None
@@ -79,7 +79,7 @@ class ResearchWorkflowOrchestrator:
         self.research_topic = research_topic
         self.workflow_id = f"research_workflow_{int(time.time())}"
         self.current_phase = ResearchPhase.INITIALIZATION
-        self.workflow_status = WorkflowStatus.NOT_STARTED
+        self.workflow_status = WorkflowStatus.PENDING
         
         # Workflow components
         self.tasks: Dict[str, ResearchTask] = {}
@@ -345,10 +345,10 @@ class ResearchWorkflowOrchestrator:
     
     def start_workflow(self) -> Dict[str, Any]:
         """Start the research collaboration workflow."""
-        if self.workflow_status != WorkflowStatus.NOT_STARTED:
+        if self.workflow_status != WorkflowStatus.PENDING:
             raise WorkflowError(f"Workflow already started with status: {self.workflow_status}")
         
-        self.workflow_status = WorkflowStatus.RUNNING
+        self.workflow_status = WorkflowStatus.EXECUTING
         self.start_time = datetime.now()
         self.current_phase = ResearchPhase.INITIALIZATION
         
@@ -380,7 +380,7 @@ class ResearchWorkflowOrchestrator:
     
     def execute_next_phase(self) -> Dict[str, Any]:
         """Execute the next phase in the research workflow."""
-        if self.workflow_status != WorkflowStatus.RUNNING:
+        if self.workflow_status != WorkflowStatus.EXECUTING:
             raise WorkflowError(f"Cannot execute phase - workflow status: {self.workflow_status}")
         
         # Check if current phase is complete
@@ -426,7 +426,7 @@ class ResearchWorkflowOrchestrator:
         # Execute ready tasks
         execution_results = []
         for task in ready_tasks:
-            if task.status == TaskStatus.PENDING:
+            if task.status == TaskStatus.ASSIGNED:
                 result = self._execute_task(task)
                 execution_results.append(result)
         
@@ -440,7 +440,7 @@ class ResearchWorkflowOrchestrator:
     
     def _execute_task(self, task: ResearchTask) -> Dict[str, Any]:
         """Execute a single research task."""
-        task.status = TaskStatus.RUNNING
+        task.status = TaskStatus.IN_PROGRESS
         task.start_time = datetime.now()
         
         self._log_event("task_started", {
@@ -666,7 +666,7 @@ class ResearchWorkflowOrchestrator:
         """Get list of tasks that are ready to execute."""
         ready_tasks = []
         for task in self.tasks.values():
-            if task.status == TaskStatus.PENDING and self._are_dependencies_met(task):
+            if task.status == TaskStatus.ASSIGNED and self._are_dependencies_met(task):
                 ready_tasks.append(task.task_id)
         return ready_tasks
     
@@ -685,7 +685,7 @@ class ResearchWorkflowOrchestrator:
         """Get list of dependencies that tasks are waiting for."""
         waiting_deps = []
         for task in tasks:
-            if task.status == TaskStatus.PENDING:
+            if task.status == TaskStatus.ASSIGNED:
                 for dep_id in task.dependencies:
                     if dep_id in self.tasks and self.tasks[dep_id].status != TaskStatus.COMPLETED:
                         waiting_deps.append(dep_id)

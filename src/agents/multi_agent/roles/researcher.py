@@ -35,6 +35,7 @@ class ResearcherRole:
         """
         self.researcher_type = researcher_type
         self.capabilities = self._define_capabilities()
+        self.quality_standards = self._define_quality_standards()
         self.role_definition = self._create_role_definition()
         
         logger.info(f"Created {researcher_type} researcher role")
@@ -122,18 +123,51 @@ class ResearcherRole:
         
         return base_capabilities
     
+    def _define_quality_standards(self) -> Dict[str, Any]:
+        """Define quality standards based on researcher type."""
+        base_standards = {
+            'accuracy_threshold': 0.9,
+            'source_credibility': 0.95,
+            'completeness_threshold': 0.85,
+            'timeliness_threshold': 0.8,
+            'objectivity_score': 0.9,
+            'min_sources': 5,  # Default minimum sources
+            'credibility_threshold': 0.8,
+            'verification_requirement': True,  # Expected by tests
+            'citation_required': False  # Default for general research
+        }
+        
+        if self.researcher_type == "academic":
+            base_standards.update({
+                'peer_review_score': 0.95,
+                'citation_accuracy': 0.98,
+                'methodology_rigor': 0.95,
+                'min_sources': 10,  # Higher for academic research
+                'citation_required': True  # Academic requires citations
+            })
+        elif self.researcher_type == "industry":
+            base_standards.update({
+                'market_relevance': 0.9,
+                'commercial_applicability': 0.85,
+                'competitive_insight': 0.8,
+                'min_sources': 7  # Medium for industry research
+            })
+        elif self.researcher_type == "technical":
+            base_standards.update({
+                'technical_accuracy': 0.95,
+                'implementation_feasibility': 0.9,
+                'innovation_factor': 0.8,
+                'min_sources': 8  # Medium-high for technical research
+            })
+        
+        return base_standards
+    
     def _create_role_definition(self) -> RoleDefinition:
         """Create role definition for the researcher."""
         expertise_areas = self._get_expertise_areas()
         instructions = self._generate_instructions()
         
-        # Store quality standards separately since RoleDefinition doesn't include them
-        self.quality_standards = {
-            "min_sources": 5 if self.researcher_type == "general" else 10,
-            "credibility_threshold": 0.8,
-            "verification_requirement": True,
-            "citation_required": self.researcher_type == "academic"
-        }
+        # Quality standards are already defined in _define_quality_standards method
         
         return RoleDefinition(
             role_id=f"{self.researcher_type}_researcher",
@@ -260,8 +294,13 @@ Technical Research Specialization:
         # Simplified evaluation - in practice, this would be more sophisticated
         base_score = 0.7
         
+        # Handle malformed or None output gracefully
+        if output is None or not isinstance(output, dict):
+            return 0.1  # Return minimum score for malformed data
+        
         # Check if output contains expected elements
-        if capability.name in output.get("capabilities_used", []):
+        capabilities_used = output.get("capabilities_used", [])
+        if isinstance(capabilities_used, list) and capability.name in capabilities_used:
             base_score += 0.2
         
         # Check output format

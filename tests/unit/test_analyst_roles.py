@@ -70,33 +70,35 @@ class TestAnalyticsCapability:
         assert low_accuracy_cap.accuracy_threshold == 0.7
 
 
+# Module-level fixtures available to all test classes
+@pytest.fixture
+def general_analyst():
+    """Create a general analyst for testing."""
+    return AnalystRole("general")
+
+@pytest.fixture
+def data_analyst():
+    """Create a data analyst for testing."""
+    return AnalystRole("data")
+
+@pytest.fixture
+def business_analyst():
+    """Create a business analyst for testing."""
+    return AnalystRole("business")
+
+@pytest.fixture
+def quality_analyst():
+    """Create a quality analyst for testing."""
+    return AnalystRole("quality")
+
+@pytest.fixture
+def research_analyst():
+    """Create a research analyst for testing."""
+    return AnalystRole("research")
+
+
 class TestAnalystRole:
     """Test AnalystRole class."""
-    
-    @pytest.fixture
-    def general_analyst(self):
-        """Create a general analyst for testing."""
-        return AnalystRole("general")
-    
-    @pytest.fixture
-    def data_analyst(self):
-        """Create a data analyst for testing."""
-        return AnalystRole("data")
-    
-    @pytest.fixture
-    def business_analyst(self):
-        """Create a business analyst for testing."""
-        return AnalystRole("business")
-    
-    @pytest.fixture
-    def quality_analyst(self):
-        """Create a quality analyst for testing."""
-        return AnalystRole("quality")
-    
-    @pytest.fixture
-    def research_analyst(self):
-        """Create a research analyst for testing."""
-        return AnalystRole("research")
     
     def test_analyst_initialization(self, general_analyst):
         """Test analyst role initialization."""

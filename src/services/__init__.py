@@ -54,7 +54,7 @@ from .metrics import (
 
 # Backward compatibility
 try:
-    from .performance_monitor import (
+    from .monitoring import (
         PerformanceMonitor as LegacyPerformanceMonitor,
         default_performance_monitor as performance_monitor
     )
