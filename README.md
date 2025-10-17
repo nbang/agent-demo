@@ -1,6 +1,6 @@
 # Agno Agent Demo
 
-A comprehensive demonstration of building AI agents using the Agno framework. This project features a single integrated demo that showcases all agent capabilities in one unified interface, including basic conversational agents, memory-enabled agents, reasoning agents with structured thinking, tool-equipped agents, and multi-agent systems for collaborative problem-solving.
+A comprehensive demonstration of building AI agents using the Agno framework. This project showcases various agent capabilities including basic conversational agents, memory-enabled agents, reasoning agents with structured thinking, tool-equipped agents, and multi-agent systems for collaborative problem-solving.
 
 ## 🎯 Key Features
 
@@ -18,8 +18,7 @@ The `single_agent_demo.py` provides five different agent modes in one applicatio
 - **Performance Monitoring**: Built-in metrics and system health tracking
 - **Security**: Input validation and credential protection
 - **Logging**: Structured logging with rotation and filtering
-- **Testing**: Full test suite with unit, integration, and contract tests
-- **SpecKit Integration**: Specification-driven development workflow
+- **Testing**: Full test suite with unit and integration tests
 
 ### 🌟 Advanced Features
 - **Streaming Responses**: Real-time token-by-token output
@@ -72,7 +71,7 @@ LOG_LEVEL=INFO
 LOG_TO_FILE=true
 ```
 
-### 3. Quick Start
+### Quick Start
 
 ```bash
 # Run the unified agent demo
@@ -445,33 +444,25 @@ tail -f logs/agent.log
 
 ## 📚 Documentation
 
-Comprehensive documentation is available in the [`docs/`](docs/) directory:
-
 ### Quick Start Guides
 - **[Memory Agent Guide](docs/MEMORY_AGENT_GUIDE.md)** - Build agents with conversation history
 - **[Reasoning Agent Guide](docs/REASONING_AGENT_GUIDE.md)** - Build agents with structured reasoning
 - **[Tools Agent Guide](docs/TOOLS_AGENT_GUIDE.md)** - Build agents with web search and tools
 
-### Implementation Status
-- **[Implementation Complete](docs/IMPLEMENTATION_COMPLETE.md)** - Overall project status
-- **[Phase 5 Integration Results](docs/PHASE5_INTEGRATION_RESULTS.md)** - Multi-agent system tests
-
-### Development Workflow
-- **[Pre-Push Checklist](docs/PRE_PUSH_CHECKLIST.md)** - Before committing changes
-- **[Cleanup Summary](docs/CLEANUP_SUMMARY.md)** - Repository maintenance guide
-- **[SpecKit Implementation](docs/SPECKIT_IMPLEMENTATION_SUMMARY.md)** - Spec-driven development
+### Project Documentation
+- **[Pre-Push Checklist](docs/PRE_PUSH_CHECKLIST.md)** - Development workflow checklist
+- **[Documentation Organization](docs/DOCS_ORGANIZATION.md)** - How documentation is structured
 
 For a complete documentation index, see **[docs/README.md](docs/README.md)**.
 
 ## 🤝 Contributing
 
-This project follows specification-driven development with SpecKit:
+This project follows a clean development workflow:
 
-1. **Review specifications** in `specs/` directory
-2. **Follow the constitution** in `.specify/memory/constitution.md`
-3. **Run tests** before submitting changes
-4. **Update documentation** for new features
-5. **Check the [Pre-Push Checklist](docs/PRE_PUSH_CHECKLIST.md)** before pushing
+1. **Review the project structure** in the `src/` directory
+2. **Run tests** before submitting changes: `python -m pytest tests/ -v`
+3. **Update documentation** for new features
+4. **Check the [Pre-Push Checklist](docs/PRE_PUSH_CHECKLIST.md)** before pushing
 
 ## 📄 License
 

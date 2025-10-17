@@ -11,40 +11,24 @@ Complete guides for implementing different agent types:
 - **[Memory Agent Guide](MEMORY_AGENT_GUIDE.md)** - Build agents with conversation history and memory
 - **[Reasoning Agent Guide](REASONING_AGENT_GUIDE.md)** - Build agents with structured reasoning capabilities
 - **[Tools Agent Guide](TOOLS_AGENT_GUIDE.md)** - Build agents with web search and utility tools
-
-### Implementation Status
-
-Documentation of completed implementations:
-
-- **[Implementation Complete](IMPLEMENTATION_COMPLETE.md)** - Overall implementation status
-- **[Memory Agent Complete](MEMORY_AGENT_COMPLETE.md)** - Memory agent implementation status
-- **[Reasoning Agent Complete](REASONING_AGENT_COMPLETE.md)** - Reasoning agent implementation status
-- **[Tools Agent Complete](TOOLS_AGENT_COMPLETE.md)** - Tools agent implementation status
-
-### Phase Documentation
-
-Multi-agent system phase documentation:
-
-- **[Phase 5 Cleanup Complete](PHASE5_CLEANUP_COMPLETE.md)** - Phase 5 cleanup summary
-- **[Phase 5 Integration Results](PHASE5_INTEGRATION_RESULTS.md)** - Phase 5 integration test results
+- **[Search Guide](SEARCH_GUIDE.md)** - Improve DuckDuckGo search reliability in multi-agent systems
 
 ### Project Management
 
 - **[Pre-Push Checklist](PRE_PUSH_CHECKLIST.md)** - Checklist before pushing to GitHub
-- **[Cleanup Summary](CLEANUP_SUMMARY.md)** - Repository cleanup summary and guidelines
-- **[Reorganization Complete](REORGANIZATION_COMPLETE.md)** - Project reorganization documentation
-- **[SpecKit Implementation Summary](SPECKIT_IMPLEMENTATION_SUMMARY.md)** - SpecKit integration summary
+- **[Documentation Organization](DOCS_ORGANIZATION.md)** - How documentation is structured
 
 ## 📂 Directory Structure
 
-```
+```text
 docs/
 ├── README.md                           # This file
-├── *_GUIDE.md                         # Implementation guides
-├── *_COMPLETE.md                      # Completion status docs
-├── PRE_PUSH_CHECKLIST.md             # Development workflow
-├── CLEANUP_SUMMARY.md                 # Repository maintenance
-└── ...                                # Other documentation
+├── MEMORY_AGENT_GUIDE.md              # Memory agent implementation guide
+├── REASONING_AGENT_GUIDE.md           # Reasoning agent implementation guide
+├── TOOLS_AGENT_GUIDE.md               # Tools agent implementation guide
+├── SEARCH_GUIDE.md                    # DuckDuckGo search reliability guide
+├── PRE_PUSH_CHECKLIST.md             # Development workflow checklist
+└── DOCS_ORGANIZATION.md               # Documentation organization guide
 ```
 
 ## 🔗 Related Documentation
@@ -73,27 +57,26 @@ See the [src/](../src/) directory for:
 When adding new documentation:
 
 1. **Place it in the appropriate location:**
-   - Root `README.md` - Project overview
-   - `docs/` - Guides, status docs, project management
-   - `specs/` - Technical specifications
+   - Root `README.md` - Project overview and getting started
+   - `docs/` - Implementation guides and project documentation
+   - `specs/` - Technical specifications and architecture
    - `examples/` - Example-specific documentation
 
 2. **Use clear naming:**
    - Guides: `*_GUIDE.md`
-   - Status: `*_COMPLETE.md`
-   - Process: `*_CHECKLIST.md`, `*_SUMMARY.md`
+   - Process: `*_CHECKLIST.md`
+   - Organization: `*_ORGANIZATION.md`
 
 3. **Include these sections:**
    - Overview/Purpose
    - Quick Start (if applicable)
-   - Detailed content
-   - Examples (if applicable)
+   - Detailed content with examples
    - Related documentation links
 
 4. **Keep it updated:**
    - Update documentation when code changes
-   - Mark outdated sections clearly
-   - Remove obsolete documentation
+   - Remove outdated documentation
+   - Link related documentation appropriately
 
 ## 🚀 Quick Links
 
@@ -101,17 +84,13 @@ When adding new documentation:
 - [Main README](../README.md) - Start here
 - [Memory Agent Guide](MEMORY_AGENT_GUIDE.md) - Build your first agent
 - [Tools Agent Guide](TOOLS_AGENT_GUIDE.md) - Add capabilities
+- [Search Guide](SEARCH_GUIDE.md) - Improve search reliability
 
 **For Developers:**
 - [Pre-Push Checklist](PRE_PUSH_CHECKLIST.md) - Before committing
-- [Cleanup Summary](CLEANUP_SUMMARY.md) - Repository hygiene
+- [Documentation Organization](DOCS_ORGANIZATION.md) - Repository documentation structure
 - [Specs Directory](../specs/) - Technical specifications
-
-**For Contributors:**
-- [Implementation Complete](IMPLEMENTATION_COMPLETE.md) - Current status
-- [Phase 5 Integration Results](PHASE5_INTEGRATION_RESULTS.md) - Test results
-- [SpecKit Implementation](SPECKIT_IMPLEMENTATION_SUMMARY.md) - Development workflow
 
 ---
 
-**Last Updated:** October 16, 2025
+**Last Updated:** October 17, 2025
